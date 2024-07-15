@@ -1,0 +1,95 @@
+#portal-root {
+  position: relative;
+  display: block;
+  width: 100%;
+
+  & .content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  .fa-calendar {
+    position: relative;
+    right: 20px;
+    width: 0;
+    cursor: pointer;
+  }
+
+  .calendar {
+    position: absolute;
+    z-index: 1000;
+    right: 0;
+    background-color: white;
+    border-radius: 2px;
+    box-shadow: black 0 0 5px;
+    overflow: hidden; // Ensure the content is hidden during collapse
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out; // Animation for collapse effect
+  }
+
+  .calendar.show {
+    max-height: 500px; // Set this to a value that can contain the entire calendar
+    opacity: 1;
+    transition: max-height 0.3s ease-in, opacity 0.3s ease-in; // Animation for expand effect
+  }
+
+  .header {
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 5px;
+  }
+
+  .header, .body, .calendar, .row {
+    width: 250px;
+  }
+
+  .row {
+    display: flex;
+  }
+
+  .col {
+    flex: 1;
+    padding: 10px 5px;
+    text-align: center;
+  }
+
+  .day, .cell {
+    font-size: 12px;
+  }
+
+  .cell {
+    cursor: pointer;
+  }
+
+  .cell.disabled {
+    & span {
+      opacity: 0;
+    }
+  }
+
+  .cell.selected {
+    border-radius: 100%;
+    background-color: rgba(240, 240, 240, 0.5);
+  }
+
+  .icon {
+    cursor: pointer;
+    margin: 0 2px;
+  }
+
+  .spacer {
+    margin: 0 auto;
+    width: 80%;
+    background-color: rgba(240, 240, 240, 0.5);
+    height: 1px;
+  }
+
+  .capitalize {
+    text-transform: capitalize;
+  }
+}
