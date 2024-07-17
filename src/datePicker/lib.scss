@@ -24,16 +24,13 @@
     background-color: white;
     border-radius: 2px;
     box-shadow: black 0 0 5px;
-    overflow: hidden; // Ensure the content is hidden during collapse
+    overflow: hidden;
     max-height: 0;
-    opacity: 0;
-    transition: max-height 0.3s ease-out, opacity 0.3s ease-out; // Animation for collapse effect
+    transition: max-height 0.3s ease-out;
   }
 
   .calendar.show {
-    max-height: 500px; // Set this to a value that can contain the entire calendar
-    opacity: 1;
-    transition: max-height 0.3s ease-in, opacity 0.3s ease-in; // Animation for expand effect
+    max-height: 500px;
   }
 
   .header {
