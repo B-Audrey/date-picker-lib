@@ -1,5 +1,4 @@
 import './lib.scss';
-
 import {useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {
@@ -15,21 +14,58 @@ import {
     subMonths,
     subYears
 } from 'date-fns';
+import {DatePickerProps} from './interface.ts';
 
-const DatePicker = ({textColor, backgroundColor, mainColor}: {
-    textColor: string,
-    backgroundColor: string,
-    mainColor: string
-}) => {
-    const [openCloseStatus, setOpenCloseStatus] = useState(false);
-    const [hasShowAnimationClass, setHasShowAnimationClass] = useState(false);
-    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
+const DatePicker = ({
+                        textColor,
+                        backgroundColor,
+                        mainColor,
+                        labelText,
+                        inputName,
+                        isRequired,
+                        returnFormat,
+                        setDate
+                    }: DatePickerProps) => {
+
+    const dateInputRef = useRef<HTMLInputElement>(null); // ref to hidden input if used with useRef by parent
+    const days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']; // days of the week in french, think about custom language in future
+
+    const [id, setId] = useState<string>(''); // use random Id so several datePicker can be used in DOM
     const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
-    const dateInputRef = useRef<HTMLInputElement>(null);
-    const days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+    const [openCloseStatus, setOpenCloseStatus] = useState(false); // set if calendar is opened or closed status
+    const [hasShowAnimationClass, setHasShowAnimationClass] = useState(false);
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [hiddenDateValue, setHiddenDateValue] = useState<any>(null);
+
+    //generate a random id for the datepicker when component is rendered
+    useEffect(() => {
+        setId(getId())
+    }, []);
+
+
+    const getId = () => `${Date.now().toString()}${Math.floor((100 * Math.random())).toString()}`;
 
     const onDateClick = (day: Date) => {
         setSelectedDate(day);
+        const utcDate = new Date(Date.UTC(day.getFullYear(), day.getMonth(), day.getDate())); // set date to UTC from user selection
+        let returnValue: Date | string | number;
+        switch (returnFormat) {
+            case 'string':
+                returnValue = format(utcDate, 'dd/MM/yyyy'); // send formatted string with only day date to parent
+                break;
+            case 'zuluDate':
+                returnValue = utcDate.toISOString(); //send Zulu date in string format to parent
+                break;
+            case 'number':
+                returnValue = utcDate.getTime(); // send timestamp to parent
+                break;
+            default:
+                returnValue = utcDate; // send date object to parent
+        }
+        console.log('value sent from input', returnValue)
+        setHiddenDateValue(returnValue);// si on a un type date, on le renvoie via l'input type date masqué avec la ref
+        if (setDate) setDate(returnValue); // si on a un fn setDate, on l'applique
         moveCalendar(false);
     };
 
@@ -54,29 +90,18 @@ const DatePicker = ({textColor, backgroundColor, mainColor}: {
     }
 
     const moveCalendar = (isToOpen: boolean) => {
-        console.log('je suis dans move calendar avec', isToOpen, 'la class show est', hasShowAnimationClass, 'le calendrier est', openCloseStatus)
         if (isToOpen) {
-            console.log('je suis dans le if move calendar avec is open a false donc fermé, je dois l ouvrir')
             setOpenCloseStatus(true);
             return setTimeout(() => {
                 setHasShowAnimationClass(true);
-                console.log('je bouge la class')
             }, 50);
-
         }
         if (!isToOpen) {
-            console.log('je suis dans le else is calendar true donc ouvert, je dois le fermer')
             setHasShowAnimationClass(false)
-            console.log('j enleve la classe show')
             return setTimeout(() => {
                 setOpenCloseStatus(false); // on ferme le calendrier pour remove du DOM apres l'animation
-                console.log('time out écoulé, je ferme le calendrier')
             }, 300);
         }
-        console.log(isToOpen)
-        console.log(hasShowAnimationClass)
-        console.log(openCloseStatus)
-        console.log('je suis à la fin de move calendar')
     }
 
     useEffect(() => {
@@ -126,24 +151,30 @@ const DatePicker = ({textColor, backgroundColor, mainColor}: {
     };
 
 
-    return (
-        <div className="date-picker" id={'portal-root'}>
+    return ( id &&
+        <div className="date-picker" id={`${id}`}>
+            <label htmlFor={inputName}>{labelText}</label>
             <div className="content" onClick={() => moveCalendar(!openCloseStatus)}>
                 <input
-                    type="text"
-                    value={selectedDate ? selectedDate.toLocaleDateString('fr-FR', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: '2-digit'
-                    }) : ''}
+                    required={isRequired}
+                    id={inputName}
+                    name={inputName}
+                    style={{display: 'none'}}
                     readOnly
                     ref={dateInputRef}
+                    value={hiddenDateValue ? hiddenDateValue : ''}
+                />
+                <input
+                    value={selectedDate ? format(selectedDate, 'dd/MM/yyyy') : ''}
+                    readOnly
                 />
                 <i className="fa fa-calendar"></i>
             </div>
             {openCloseStatus && createPortal(
                 <div style={{backgroundColor: '#FFF'}}>
-                    <div className={`calendar ${hasShowAnimationClass ? 'show' : ''}`}>
+                    <div id="calendarOverlay" onClick={() => moveCalendar(false)}></div>
+                    <div className={`calendar ${hasShowAnimationClass ? 'show' : ''}`}
+                         onClick={(e) => e.stopPropagation()}>
                         <div className="header row" style={{backgroundColor: backgroundColor}}>
                             <div>
                                 <i style={{color: mainColor}} className="fa-solid fa-calendar-day icon"
@@ -177,8 +208,9 @@ const DatePicker = ({textColor, backgroundColor, mainColor}: {
                         <div className={'spacer'}/>
                         {renderCells()}
                     </div>
-                </div>,
-                document.getElementById('portal-root') as HTMLElement
+                </div>
+                ,
+                document.getElementById(`${id}`) as HTMLElement
             )}
         </div>
     );
