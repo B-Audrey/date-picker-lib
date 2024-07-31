@@ -20,10 +20,10 @@ Cette lib a été créee pour être utilisée en français avec une semaine comm
     - Uncontrolled Form: returns the value via the input's name and a useRef associated with a form in your
       parent component
 - [x] Date return formats:
-    - ISOString in UTC+00 to ignore potential time zone offsets
-    - String in 'yyyy-MM-dd' format for string fields
-    - DateUtc for date fields with local time
-    - Number for number fields with a timestamp
+    - `ZuluString` in UTC+00 to ignore potential time zone offsets
+    - `String` in 'yyyy-MM-dd' format for string fields
+    - `LocaleUtc` for date fields with local time
+    - `Number` for number fields with a timestamp
 
 -----------------------------------
 
@@ -42,17 +42,110 @@ Cette lib a été créee pour être utilisée en français avec une semaine comm
     - Uncontrolled Form : renvoie de la valeur via le name de l'input un useRef associé à un form dans votre composant
       parent
 - [x] Renvoi de la date au format :
-    - `ISOString` en UCT00 pour ne pas tenir compte des potentiels décalages horaires
-    - `String` dans un format 'yyyy-MM-dd' pour les champs de type String
-    - `DateUtc` pour les champs de type date avec heure locale
-    - `Number` pour les champs de type nombre avec un timestamp
+    - `ZuluString` string avec la date en Zulu pour ne pas tenir compte des potentiels décalages horaires
+    - `String` string dans un format 'yyyy-MM-dd' pour les champs de type String
+    - `LocaleUtc` objet de type date pour les champs de type date avec heure locale
+    - `Number` nombre pour les champs de type nombre avec un timestamp
 
 
 ## Installation
 
 ```bash
-npm install french-react-date-picker
+npm install french-date-picker
 ```
+
+## Usage
+
+```tsx
+const App = () => {
+    const [date, setDate] = React.useState <any>(null);
+    useEffect(() => {
+        console.log(date, typeof date);
+    }, [date]);
+    return (
+        <>
+            <h1>Date Picker Works</h1>
+            <DatePicker
+                mainColor={'#e19f2e'}
+                backgroundColor={'#731d48'}
+                textColor={'#bbe0e3'}
+                labelText={'Date'}
+                inputName={'date'}
+                isRequired={true}
+                setDate={setDate}
+                returnFormat={DatePickerReturnFormats.zuluString}
+            />
+        </>
+    )
+}
+```
+
+```tsx
+const App = () => {
+  const formRef = useRef<HTMLFormElement>(null);
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    let formData = new FormData(formRef.current!);
+    console.log(...formData);
+  }
+  return (
+          <>
+            <h1>Date Picker Works</h1>
+            <form ref={formRef} onSubmit={handleSubmit}>
+              <DatePicker
+                      mainColor={'#110A47FF'}
+                      backgroundColor={'#c0cac3'}
+                      textColor={'#000'}
+                      labelText={'Date'}
+                      inputName={'date'}
+                      isRequired={true}
+                      returnFormat={DatePickerReturnFormats.zuluString}
+              />
+              <button>Submit</button>
+            </form>
+          </>
+  )
+}
+```
+
+## Props
+
+There is an interface for the props, you can use it to see the different props available : 
+interface DatePickerProps contains :
+- textColor: string, (hexadecimal color)
+- backgroundColor: string, (hexadecimal color)
+- mainColor: string, (hexadecimal color)
+- labelText: string,
+- inputName: string, (will be use to get the value in an uncontrolled form)
+- isRequired: boolean,
+- returnFormat: DatePickerReturnFormats, (this value is an enum with the following values : zuluString, string, localeUtc, number)
+- setDate?: Dispatch<SetStateAction<any>> (this is the optionnal function if you want to use a controlled form)
+
+-------------------------------------------------
+
+Il y a une interface pour les props, vous pouvez l'utiliser pour voir les différentes props disponibles :
+l'interface DatePickerProps contient :
+- textColor: string, (couleur hexadécimale)
+- backgroundColor: string, (couleur hexadécimale)
+- mainColor: string, (couleur hexadécimale)
+- labelText: string,
+- inputName: string, (sera utilisé pour récupérer la valeur dans un formulaire non contrôlé)
+- isRequired: boolean,
+- returnFormat: DatePickerReturnFormats, (cette valeur est une enum avec les valeurs suivantes : zuluString, string, localeUtc, number)
+- setDate?: Dispatch<SetStateAction<any>> (c'est la fonction optionnelle si vous voulez utiliser un formulaire contrôlé)
+
+
+## Style
+
+The style is wrapped in a block with the class .date-picker, you can use it to override it locally as needed
+You must use the css file provided in the lib to have the correct style
+Font family is not included in the css file, you can use the one you want
+input is displayed as a block and will take 100% of the width of its container
+-----------------------------------
+Le style est englobé dans un bloc ayant pour class .date-picker, vous pouvez l'utiliser pour le surcharger localement selon vos besoins
+Vous devez utiliser le fichier css fourni dans la lib pour avoir le style correct
+La famille de police n'est pas incluse dans le fichier css, vous pouvez utiliser celle que vous voulez
+l'input est affiché en block et prendra 100% de la largeur de son conteneur
 
 
 ## Dependencies / Dépendances

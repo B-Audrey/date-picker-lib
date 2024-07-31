@@ -1,3 +1,5 @@
+import {Dispatch, SetStateAction} from 'react';
+
 export interface DatePickerProps {
     textColor: string,
     backgroundColor: string,
@@ -6,12 +8,12 @@ export interface DatePickerProps {
     inputName: string,
     isRequired: boolean,
     returnFormat: DatePickerReturnFormats,
-    setDate?: (date:any) => void
+    setDate?: Dispatch<SetStateAction<any>>
 }
 
 export enum DatePickerReturnFormats {
     string = 'string', // 'dd/MM/yyyy'
-    zuluDate = 'zuluDate', // 'yyyy-MM-ddTHH:mm:ss.sssZ'
+    zuluString = 'zuluString', // 'yyyy-MM-ddTHH:mm:ss.sssZ'
     number = 'number', // 1234567890
-    locale = 'locale' // yyyy-MM-ddTHH:mm:ss.sssUTC+2
+    localeUtc = 'localeUtc' // yyyy-MM-ddTHH:mm:ss.sssUTC+2
 }

@@ -15,7 +15,7 @@ import {
     subMonths,
     subYears
 } from 'date-fns';
-import {DatePickerProps} from './interface.ts';
+import {DatePickerProps, DatePickerReturnFormats} from './interface.ts';
 
 const DatePicker = ({
                         textColor,
@@ -50,13 +50,13 @@ const DatePicker = ({
         const utcDate = new Date(Date.UTC(day.getFullYear(), day.getMonth(), day.getDate()));
         let returnValue: Date | string | number;
         switch (returnFormat) {
-            case 'string':
+            case DatePickerReturnFormats.string:
                 returnValue = format(utcDate, 'dd/MM/yyyy');
                 break;
-            case 'zuluDate':
+            case DatePickerReturnFormats.zuluString:
                 returnValue = utcDate.toISOString();
                 break;
-            case 'number':
+            case DatePickerReturnFormats.number:
                 returnValue = utcDate.getTime();
                 break;
             default:
@@ -126,8 +126,8 @@ const DatePicker = ({
     const renderCells = () => {
         const monthStart = startOfMonth(currentMonth);
         const monthEnd = endOfMonth(monthStart);
-        const startDate = startOfWeek(monthStart, { weekStartsOn: 1 });
-        const endDate = endOfWeek(monthEnd, { weekStartsOn: 1 });
+        const startDate = startOfWeek(monthStart, {weekStartsOn: 1});
+        const endDate = endOfWeek(monthEnd, {weekStartsOn: 1});
 
         const rows = [];
         let days = [];
@@ -177,7 +177,13 @@ const DatePicker = ({
                     ref={dateInputRef}
                     value={hiddenDateValue ? hiddenDateValue : ''}
                 />
-                <i style={{color: mainColor}} className="fa fa-calendar"></i>
+                <div className="calendar-icon icon">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 448 512">
+                        <path fill={mainColor}
+                              d="M128 0c17.7 0 32 14.3 32 32l0 32 128 0 0-32c0-17.7 14.3-32 32-32s32 14.3 32 32l0 32 48 0c26.5 0 48 21.5 48 48l0 48L0 160l0-48C0 85.5 21.5 64 48 64l48 0 0-32c0-17.7 14.3-32 32-32zM0 192l448 0 0 272c0 26.5-21.5 48-48 48L48 512c-26.5 0-48-21.5-48-48L0 192zm64 80l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm128 0l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zM64 400l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0zm112 16l0 32c0 8.8 7.2 16 16 16l32 0c8.8 0 16-7.2 16-16l0-32c0-8.8-7.2-16-16-16l-32 0c-8.8 0-16 7.2-16 16z"/>
+                    </svg>
+                </div>
             </div>
             {openCloseStatus && createPortal(
                 <div style={{backgroundColor: '#FFF'}}>
@@ -186,27 +192,71 @@ const DatePicker = ({
                          onClick={(e) => e.stopPropagation()}>
                         <div className="header row" style={{backgroundColor: backgroundColor}}>
                             <div>
-                                <i style={{color: mainColor}} className="fa-solid fa-calendar-day icon"
-                                   onClick={goToday} title={"Aujourd'hui"}></i>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     className="icon"
+                                     onClick={goToday}
+                                     viewBox="0 0 448 512">
+                                    <path
+                                        fill={mainColor}
+                                        d="M128 0c17.7 0 32 14.3 32 32l0 32 128 0 0-32c0-17.7 14.3-32 32-32s32 14.3 32 32l0 32 48 0c26.5 0 48 21.5 48 48l0 48L0 160l0-48C0 85.5 21.5 64 48 64l48 0 0-32c0-17.7 14.3-32 32-32zM0 192l448 0 0 272c0 26.5-21.5 48-48 48L48 512c-26.5 0-48-21.5-48-48L0 192zm80 64c-8.8 0-16 7.2-16 16l0 96c0 8.8 7.2 16 16 16l96 0c8.8 0 16-7.2 16-16l0-96c0-8.8-7.2-16-16-16l-96 0z"/>
+                                </svg>
                             </div>
 
                             <div>
-                                <i style={{color: mainColor}} className="fa-regular fa-calendar-minus icon"
-                                   onClick={prevTenYears} title={'-10 ans'}></i>
+                                {/*Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.*/}
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     className="icon"
+                                     onClick={prevTenYears}
+                                     viewBox="0 0 448 512">
+                                    <path
+                                        fill={mainColor}
+                                        d="M128 0c13.3 0 24 10.7 24 24l0 40 144 0 0-40c0-13.3 10.7-24 24-24s24 10.7 24 24l0 40 40 0c35.3 0 64 28.7 64 64l0 16 0 48 0 256c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 192l0-48 0-16C0 92.7 28.7 64 64 64l40 0 0-40c0-13.3 10.7-24 24-24zM400 192L48 192l0 256c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-256zM296 352l-144 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l144 0c13.3 0 24 10.7 24 24s-10.7 24-24 24z"/>
+                                </svg>
                                 <span>|</span>
-                                <i style={{color: mainColor}} className="fa-solid fa-angles-left icon"
-                                   onClick={prevYear} title={'-1 an'}></i>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     className="icon"
+                                     onClick={prevYear}
+                                     viewBox="0 0 512 512">
+                                    <path
+                                        fill={mainColor}
+                                        d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160zm352-160l-160 160c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L301.3 256 438.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0z"/>
+                                </svg>
                                 <span>|</span>
-                                <i style={{color: mainColor}} className="fa-solid fa-angle-left icon"
-                                   onClick={prevMonth} title={'-1 mois'}></i>
-                                <i style={{color: mainColor}} className="fa-solid fa-angle-right icon"
-                                   onClick={nextMonth} title={'+1 mois'}></i>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     className="icon"
+                                     onClick={prevMonth}
+                                     viewBox="0 0 320 512">
+                                    <path
+                                        fill={mainColor}
+                                        d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/>
+                                </svg>
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     className="icon"
+                                     onClick={nextMonth}
+                                     viewBox="0 0 320 512">
+                                    <path
+                                        fill={mainColor}
+                                        d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/>
+                                </svg>
                                 <span>|</span>
-                                <i style={{color: mainColor}} className="fa-solid fa-angles-right icon"
-                                   onClick={nextYear} title={'+1 an'}></i>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     className="icon"
+                                     onClick={nextYear}
+                                     viewBox="0 0 512 512">
+                                    <path
+                                        fill={mainColor}
+                                        d="M470.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 256 265.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160zm-352 160l160-160c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L210.7 256 73.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0z"/>
+                                </svg>
                                 <span>|</span>
-                                <i style={{color: mainColor}} className="fa-regular fa-calendar-plus icon"
-                                   onClick={nextTenYears} title={'+10 ans'}></i>
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     className="icon"
+                                     onClick={nextTenYears}
+                                     viewBox="0 0 448 512">
+                                    <path
+                                        fill={mainColor}
+                                        d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L64 64C28.7 64 0 92.7 0 128l0 16 0 48L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-256 0-48 0-16c0-35.3-28.7-64-64-64l-40 0 0-40c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 40L152 64l0-40zM48 192l352 0 0 256c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16l0-256zm176 40c-13.3 0-24 10.7-24 24l0 48-48 0c-13.3 0-24 10.7-24 24s10.7 24 24 24l48 0 0 48c0 13.3 10.7 24 24 24s24-10.7 24-24l0-48 48 0c13.3 0 24-10.7 24-24s-10.7-24-24-24l-48 0 0-48c0-13.3-10.7-24-24-24z"/>
+                                </svg>
 
                             </div>
                         </div>

@@ -10,11 +10,29 @@
     box-sizing: border-box;
   }
 
-  .fa-calendar {
+  .icon {
+    cursor: pointer;
+    margin: 0 4px;
+    height: 1em;
+    width: 1em;
+  }
+
+  .calendar-icon {
     position: relative;
     right: 2em;
-    width: 0;
     cursor: pointer;
+    height: 1em;
+    display: flex;
+    align-items: center;
+    width: 0;
+    margin: 0;
+
+    & svg {
+      position: absolute;
+      width: 1em;
+      height: 1em;
+      z-index: 1;
+    }
   }
 
   .calendar {
@@ -49,6 +67,11 @@
     display: flex;
   }
 
+  .header div {
+    display: flex;
+    align-items: center;
+  }
+
   .col {
     flex: 1;
     padding: 10px 5px;
@@ -79,11 +102,6 @@
     background-color: rgba(240, 240, 240, 0.5);
   }
 
-  .icon {
-    cursor: pointer;
-    margin: 0 4px;
-  }
-
   .spacer {
     margin: 0 auto;
     width: 80%;
@@ -97,6 +115,10 @@
     text-align: center;
     margin: 0 auto;
     padding: 5px 0;
+  }
+
+  input {
+    width: 100%;
   }
 
 }
