@@ -118,7 +118,7 @@ interface DatePickerProps contains :
 - labelText: string,
 - inputName: string, (will be use to get the value in an uncontrolled form)
 - isRequired: boolean,
-- returnFormat: DatePickerReturnFormats, (this value is an enum with the following values : zuluString, string, localeUtc, number)
+- returnFormat: string, (this value is one of the following values : zuluString, string, localeUtc, number)
 - setDate?: Dispatch<SetStateAction<any>> (this is the optionnal function if you want to use a controlled form)
 
 -------------------------------------------------
@@ -131,17 +131,17 @@ l'interface DatePickerProps contient :
 - labelText: string,
 - inputName: string, (sera utilisé pour récupérer la valeur dans un formulaire non contrôlé)
 - isRequired: boolean,
-- returnFormat: DatePickerReturnFormats, (cette valeur est une enum avec les valeurs suivantes : zuluString, string, localeUtc, number)
+- returnFormat: string, (cette valeur est une doit contenir l'une des valeurs suivantes : zuluString, string, localeUtc, number)
 - setDate?: Dispatch<SetStateAction<any>> (c'est la fonction optionnelle si vous voulez utiliser un formulaire contrôlé)
 
 
 ## Style
 
-
 Style is wrapped in a block with the class .date-picker, you can use it to override it locally as needed.
 You must use the css file provided in the lib to have the correct style
 Font family is not included in the css file, you can use the one you want
 input is displayed as a block and will take 100% of the width of its container
+
 -------------------------------------------------
 
 Le style est englobé dans un bloc ayant pour class .date-picker, vous pouvez l'utiliser pour le surcharger localement selon vos besoins

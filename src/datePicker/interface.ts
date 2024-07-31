@@ -7,13 +7,6 @@ export interface DatePickerProps {
     labelText: string,
     inputName: string,
     isRequired: boolean,
-    returnFormat: DatePickerReturnFormats,
+    returnFormat: 'string' | 'zuluString' | 'number' | 'localeUtc',
     setDate?: Dispatch<SetStateAction<any>>
-}
-
-export enum DatePickerReturnFormats {
-    string = 'string', // 'dd/MM/yyyy'
-    zuluString = 'zuluString', // 'yyyy-MM-ddTHH:mm:ss.sssZ'
-    number = 'number', // 1234567890
-    localeUtc = 'localeUtc' // yyyy-MM-ddTHH:mm:ss.sssUTC+2
 }
