@@ -1,7 +1,7 @@
 # FRENCH DATE PICKER
 
-This lib has been created to be used in french with a week starting on monday
-Cette lib a été créee pour être utilisée en français avec une semaine commencant le lundi
+This lib has been created to be used in french with a week starting on monday. \
+Cette lib a été crée pour être utilisée en français avec une semaine commençant le lundi
 
 ## Features / Fonctionnalités
 
@@ -18,7 +18,7 @@ Cette lib a été créee pour être utilisée en français avec une semaine comm
 - [x] Usage in all forms
     - Controlled Form: returns the value via a setDateState() function
     - Uncontrolled Form: returns the value via the input's name and a useRef associated with a form in your
-      parent component
+      parent component.
 - [x] Date return formats:
     - `ZuluString` in UTC+00 to ignore potential time zone offsets
     - `String` in 'yyyy-MM-dd' format for string fields
@@ -136,6 +136,19 @@ l'interface DatePickerProps contient :
 
 
 ## Style
+
+To use the style, you must import the css file in your project
+think about import it on the top to overwrite it if you need to
+
+-------------------------------------------------
+
+Pour utiliser le style, vous devez importer le fichier css dans votre projet
+pensez à l'importer en haut pour le surcharger si vous en avez besoin
+
+
+```jsx
+import 'french-date-picker/style.css';
+```
 
 Style is wrapped in a block with the class .date-picker, you can use it to override it locally as needed.
 You must use the css file provided in the lib to have the correct style
