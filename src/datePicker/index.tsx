@@ -15,7 +15,7 @@ import {
     subMonths,
     subYears
 } from 'date-fns';
-import {DatePickerProps, DatePickerReturnFormats} from './interface.ts';
+import {DatePickerProps} from './interface.ts';
 
 const DatePicker = ({
                         textColor,
@@ -50,13 +50,13 @@ const DatePicker = ({
         const utcDate = new Date(Date.UTC(day.getFullYear(), day.getMonth(), day.getDate()));
         let returnValue: Date | string | number;
         switch (returnFormat) {
-            case DatePickerReturnFormats.string:
+            case 'string':
                 returnValue = format(utcDate, 'dd/MM/yyyy');
                 break;
-            case DatePickerReturnFormats.zuluString:
+            case 'zuluString':
                 returnValue = utcDate.toISOString();
                 break;
-            case DatePickerReturnFormats.number:
+            case 'number':
                 returnValue = utcDate.getTime();
                 break;
             default:

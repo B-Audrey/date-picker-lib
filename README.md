@@ -73,7 +73,7 @@ const App = () => {
                 inputName={'date'}
                 isRequired={true}
                 setDate={setDate}
-                returnFormat={DatePickerReturnFormats.zuluString}
+                returnFormat={'zuluString'}
             />
         </>
     )
@@ -99,7 +99,7 @@ const App = () => {
                       labelText={'Date'}
                       inputName={'date'}
                       isRequired={true}
-                      returnFormat={DatePickerReturnFormats.zuluString}
+                      returnFormat={'number'}
               />
               <button>Submit</button>
             </form>
