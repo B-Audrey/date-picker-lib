@@ -137,11 +137,13 @@ l'interface DatePickerProps contient :
 
 ## Style
 
-The style is wrapped in a block with the class .date-picker, you can use it to override it locally as needed
+
+Style is wrapped in a block with the class .date-picker, you can use it to override it locally as needed.
 You must use the css file provided in the lib to have the correct style
 Font family is not included in the css file, you can use the one you want
 input is displayed as a block and will take 100% of the width of its container
------------------------------------
+-------------------------------------------------
+
 Le style est englobé dans un bloc ayant pour class .date-picker, vous pouvez l'utiliser pour le surcharger localement selon vos besoins
 Vous devez utiliser le fichier css fourni dans la lib pour avoir le style correct
 La famille de police n'est pas incluse dans le fichier css, vous pouvez utiliser celle que vous voulez
