@@ -4,6 +4,7 @@ import {createPortal} from 'react-dom';
 import {
     addDays,
     addMonths,
+    addYears,
     endOfMonth,
     endOfWeek,
     format,
@@ -16,7 +17,6 @@ import {
 } from 'date-fns';
 import {DatePickerProps} from './interface.ts';
 
-
 const DatePicker = ({
                         textColor,
                         backgroundColor,
@@ -28,66 +28,77 @@ const DatePicker = ({
                         setDate
                     }: DatePickerProps) => {
 
-    const dateInputRef = useRef<HTMLInputElement>(null); // ref to hidden input if used with useRef by parent
-    const days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']; // days of the week in french, think about custom language in future
+    const dateInputRef = useRef<HTMLInputElement>(null);
+    const days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 
-    const [id, setId] = useState<string>(''); // use random Id so several datePicker can be used in DOM
+    const [id, setId] = useState<string>('');
     const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
-    const [openCloseStatus, setOpenCloseStatus] = useState(false); // set if calendar is opened or closed status
+    const [openCloseStatus, setOpenCloseStatus] = useState(false);
     const [hasShowAnimationClass, setHasShowAnimationClass] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [hiddenDateValue, setHiddenDateValue] = useState<any>(null);
 
-    //generate a random id for the datepicker when component is rendered
-    useEffect(() => {
-        setId(getId())
-    }, []);
 
+    useEffect(() => {
+        setId(getId());
+    }, []);
 
     const getId = () => `${Date.now().toString()}${Math.floor((100 * Math.random())).toString()}`;
 
     const onDateClick = (day: Date) => {
         setSelectedDate(day);
-        const utcDate = new Date(Date.UTC(day.getFullYear(), day.getMonth(), day.getDate())); // set date to UTC from user selection
+        const utcDate = new Date(Date.UTC(day.getFullYear(), day.getMonth(), day.getDate()));
         let returnValue: Date | string | number;
         switch (returnFormat) {
             case 'string':
-                returnValue = format(utcDate, 'dd/MM/yyyy'); // send formatted string with only day date to parent
+                returnValue = format(utcDate, 'dd/MM/yyyy');
                 break;
             case 'zuluDate':
-                returnValue = utcDate.toISOString(); //send Zulu date in string format to parent
+                returnValue = utcDate.toISOString();
                 break;
             case 'number':
-                returnValue = utcDate.getTime(); // send timestamp to parent
+                returnValue = utcDate.getTime();
                 break;
             default:
-                returnValue = utcDate; // send date object to parent
+                returnValue = utcDate;
         }
-        console.log('value sent from input', returnValue)
-        setHiddenDateValue(returnValue);// si on a un type date, on le renvoie via l'input type date masqué avec la ref
-        if (setDate) setDate(returnValue); // si on a un fn setDate, on l'applique
+        setHiddenDateValue(returnValue);
+        if (setDate) setDate(returnValue);
         moveCalendar(false);
     };
 
     const nextMonth = () => {
-        setCurrentMonth(addMonths(currentMonth, 1));
+        const newMonth = addMonths(currentMonth, 1);
+        setCurrentMonth(newMonth);
     };
 
     const prevMonth = () => {
-        setCurrentMonth(subMonths(currentMonth, 1));
+        const newMonth = subMonths(currentMonth, 1);
+        setCurrentMonth(newMonth);
     };
 
     const prevYear = () => {
-        setCurrentMonth(subYears(currentMonth, 1));
-    }
+        const newMonth = subYears(currentMonth, 1);
+        setCurrentMonth(newMonth);
+    };
 
     const nextYear = () => {
-        setCurrentMonth(addMonths(currentMonth, 1));
+        const newMonth = addYears(currentMonth, 1);
+        setCurrentMonth(newMonth);
+    };
+    const nextTenYears = () => {
+        const newMonth = addYears(currentMonth, 10);
+        setCurrentMonth(newMonth);
+    };
+
+    const prevTenYears = () => {
+        const newMonth = subYears(currentMonth, 10);
+        setCurrentMonth(newMonth);
     }
 
     const goToday = () => {
         setCurrentMonth(new Date());
-    }
+    };
 
     const moveCalendar = (isToOpen: boolean) => {
         if (isToOpen) {
@@ -97,12 +108,12 @@ const DatePicker = ({
             }, 50);
         }
         if (!isToOpen) {
-            setHasShowAnimationClass(false)
+            setHasShowAnimationClass(false);
             return setTimeout(() => {
-                setOpenCloseStatus(false); // on ferme le calendrier pour remove du DOM apres l'animation
+                setOpenCloseStatus(false);
             }, 300);
         }
-    }
+    };
 
     useEffect(() => {
         if (openCloseStatus) {
@@ -115,11 +126,10 @@ const DatePicker = ({
     const renderCells = () => {
         const monthStart = startOfMonth(currentMonth);
         const monthEnd = endOfMonth(monthStart);
-        const startDate = startOfWeek(monthStart);
-        const endDate = endOfWeek(monthEnd);
+        const startDate = startOfWeek(monthStart, { weekStartsOn: 1 });
+        const endDate = endOfWeek(monthEnd, { weekStartsOn: 1 });
 
         const rows = [];
-
         let days = [];
         let day = startDate;
         let formattedDate = "";
@@ -150,11 +160,14 @@ const DatePicker = ({
         return <div>{rows}</div>;
     };
 
-
-    return ( id &&
+    return (id &&
         <div className="date-picker" id={`${id}`}>
             <label htmlFor={inputName}>{labelText}</label>
             <div className="content" onClick={() => moveCalendar(!openCloseStatus)}>
+                <input
+                    value={selectedDate ? format(selectedDate, 'dd/MM/yyyy') : ''}
+                    readOnly
+                />
                 <input
                     required={isRequired}
                     id={inputName}
@@ -164,11 +177,7 @@ const DatePicker = ({
                     ref={dateInputRef}
                     value={hiddenDateValue ? hiddenDateValue : ''}
                 />
-                <input
-                    value={selectedDate ? format(selectedDate, 'dd/MM/yyyy') : ''}
-                    readOnly
-                />
-                <i className="fa fa-calendar"></i>
+                <i style={{color: mainColor}} className="fa fa-calendar"></i>
             </div>
             {openCloseStatus && createPortal(
                 <div style={{backgroundColor: '#FFF'}}>
@@ -178,28 +187,37 @@ const DatePicker = ({
                         <div className="header row" style={{backgroundColor: backgroundColor}}>
                             <div>
                                 <i style={{color: mainColor}} className="fa-solid fa-calendar-day icon"
-                                   onClick={goToday}></i>
+                                   onClick={goToday} title={"Aujourd'hui"}></i>
                             </div>
+
                             <div>
-                                <span className={'capitalize'}
-                                      style={{color: textColor}}>{currentMonth.toLocaleDateString('fr-FR', {
-                                    month: 'long',
-                                    year: 'numeric'
-                                })}</span>
-                            </div>
-                            <div>
+                                <i style={{color: mainColor}} className="fa-regular fa-calendar-minus icon"
+                                   onClick={prevTenYears} title={'-10 ans'}></i>
+                                <span>|</span>
                                 <i style={{color: mainColor}} className="fa-solid fa-angles-left icon"
-                                   onClick={prevYear}></i>
+                                   onClick={prevYear} title={'-1 an'}></i>
                                 <span>|</span>
                                 <i style={{color: mainColor}} className="fa-solid fa-angle-left icon"
-                                   onClick={prevMonth}></i>
+                                   onClick={prevMonth} title={'-1 mois'}></i>
                                 <i style={{color: mainColor}} className="fa-solid fa-angle-right icon"
-                                   onClick={nextMonth}></i>
+                                   onClick={nextMonth} title={'+1 mois'}></i>
                                 <span>|</span>
                                 <i style={{color: mainColor}} className="fa-solid fa-angles-right icon"
-                                   onClick={nextYear}></i>
+                                   onClick={nextYear} title={'+1 an'}></i>
+                                <span>|</span>
+                                <i style={{color: mainColor}} className="fa-regular fa-calendar-plus icon"
+                                   onClick={nextTenYears} title={'+10 ans'}></i>
+
                             </div>
                         </div>
+                        <span className={'current-date'}
+                              style={{
+                                  color: textColor,
+                                  backgroundColor: backgroundColor
+                              }}>{currentMonth.toLocaleDateString('fr-FR', {
+                            month: 'long',
+                            year: 'numeric'
+                        })}</span>
                         <div className={'spacer'}/>
                         <div style={{color: textColor, backgroundColor: backgroundColor}} className="row">
                             {days.map((d, i) => <span style={{color: textColor}} className={'col day'}
@@ -208,8 +226,7 @@ const DatePicker = ({
                         <div className={'spacer'}/>
                         {renderCells()}
                     </div>
-                </div>
-                ,
+                </div>,
                 document.getElementById(`${id}`) as HTMLElement
             )}
         </div>
