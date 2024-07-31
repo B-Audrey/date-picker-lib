@@ -16,7 +16,7 @@ export default defineConfig({
     build: {
         lib: {
             entry: 'src/index.ts',
-            name: 'lib',
+            name: 'french-date-picker',
             formats: ['es','cjs', 'umd'],
             fileName: (format) => `lib.${format}.js`
         },

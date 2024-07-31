@@ -1,4 +1,4 @@
-import './lib.scss';
+import './date-picker.scss';
 import {useEffect, useRef, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {

@@ -5,6 +5,13 @@ export interface DatePickerProps {
     labelText: string,
     inputName: string,
     isRequired: boolean,
-    returnFormat: 'string' | 'zuluDate' | 'number' | 'locale',
+    returnFormat: DatePickerReturnFormats,
     setDate?: (date:any) => void
+}
+
+export enum DatePickerReturnFormats {
+    string = 'string', // 'dd/MM/yyyy'
+    zuluDate = 'zuluDate', // 'yyyy-MM-ddTHH:mm:ss.sssZ'
+    number = 'number', // 1234567890
+    locale = 'locale' // yyyy-MM-ddTHH:mm:ss.sssUTC+2
 }

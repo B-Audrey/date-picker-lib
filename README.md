@@ -47,14 +47,15 @@ Cette lib a été créee pour être utilisée en français avec une semaine comm
     - `DateUtc` pour les champs de type date avec heure locale
     - `Number` pour les champs de type nombre avec un timestamp
 
-## Dependencies / Dépendances
-
-- [react](https://www.npmjs.com/package/react)
-- [date-fns](https://www.npmjs.com/package/date-fns)
-
 
 ## Installation
 
 ```bash
 npm install french-react-date-picker
 ```
+
+
+## Dependencies / Dépendances
+
+- [react](https://www.npmjs.com/package/react)
+- [date-fns](https://www.npmjs.com/package/date-fns)

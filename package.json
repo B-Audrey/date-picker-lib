@@ -1,5 +1,6 @@
 {
-  "name": "lib",
+  "name": "french-date-picker",
+  "description": "Date picker for your React app with custom return values and custom style",
   "private": true,
   "version": "0.0.0",
   "type": "module",
