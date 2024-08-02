@@ -95,6 +95,10 @@
     & span {
       opacity: 0;
     }
+    &:hover {
+      background-color: transparent;
+      border-radius: unset;
+    }
   }
 
   .cell.selected {

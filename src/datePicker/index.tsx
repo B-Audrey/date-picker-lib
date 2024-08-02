@@ -143,7 +143,7 @@ const DatePicker = ({
                         style={{color: textColor}}
                         className={`col cell ${!isSameMonth(day, monthStart) ? "disabled" : isSameDay(day, selectedDate!) ? "selected" : ""}`}
                         key={day.toString()}
-                        onClick={() => onDateClick(cloneDay)}
+                        onClick={isSameMonth(day, monthStart) ? () => onDateClick(cloneDay) : undefined}
                     >
                         <span className="number">{formattedDate}</span>
                     </div>
