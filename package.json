@@ -2,7 +2,7 @@
   "name": "french-date-picker",
   "description": "Date picker for your React app with custom return values and custom style",
   "private": false,
-  "version": "1.0.7",
+  "version": "1.0.8",
   "type": "module",
   "files": [
     "dist"

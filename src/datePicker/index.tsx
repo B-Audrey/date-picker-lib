@@ -35,7 +35,7 @@ const DatePicker = ({
     const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
     const [openCloseStatus, setOpenCloseStatus] = useState(false);
     const [hasShowAnimationClass, setHasShowAnimationClass] = useState(false);
-    const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [hiddenDateValue, setHiddenDateValue] = useState<any>(null);
 
 
