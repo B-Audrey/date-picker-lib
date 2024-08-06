@@ -35,6 +35,10 @@
     }
   }
 
+  .days {
+    padding: 3px 0;
+  }
+
   .calendar {
     position: absolute;
     z-index: 1000;
@@ -104,6 +108,11 @@
   .cell.selected {
     border-radius: 100%;
     background-color: rgba(240, 240, 240, 0.5);
+  }
+
+  .cell.today {
+    border-radius: 100%;
+    border: 2px solid rgba(240, 240, 240, 0.5);
   }
 
   .spacer {

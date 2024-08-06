@@ -35,7 +35,7 @@ const DatePicker = ({
     const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
     const [openCloseStatus, setOpenCloseStatus] = useState(false);
     const [hasShowAnimationClass, setHasShowAnimationClass] = useState(false);
-    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
     const [hiddenDateValue, setHiddenDateValue] = useState<any>(null);
 
 
@@ -141,7 +141,7 @@ const DatePicker = ({
                 days.push(
                     <div
                         style={{color: textColor}}
-                        className={`col cell ${!isSameMonth(day, monthStart) ? "disabled" : isSameDay(day, selectedDate!) ? "selected" : ""}`}
+                        className={`col cell ${!isSameMonth(day, monthStart) ? "disabled" : isSameDay(day, selectedDate!) ? "selected" : ""} ${isSameDay(day, new Date()) ? "today" : ""}`}
                         key={day.toString()}
                         onClick={isSameMonth(day, monthStart) ? () => onDateClick(cloneDay) : undefined}
                     >
@@ -151,13 +151,13 @@ const DatePicker = ({
                 day = addDays(day, 1);
             }
             rows.push(
-                <div className="row body" style={{backgroundColor: backgroundColor}} key={day.toString()}>
+                <div className="row body"  key={day.toString()}>
                     {days}
                 </div>
             );
             days = [];
         }
-        return <div>{rows}</div>;
+        return <div className="days" style={{backgroundColor: backgroundColor}}>{rows}</div>;
     };
 
     return (id &&

@@ -137,19 +137,6 @@ l'interface DatePickerProps contient :
 
 ## Style
 
-To use the style, you must import the css file in your project
-think about import it on the top to overwrite it if you need to
-
--------------------------------------------------
-
-Pour utiliser le style, vous devez importer le fichier css dans votre projet
-pensez à l'importer en haut pour le surcharger si vous en avez besoin
-
-
-```jsx
-import 'french-date-picker/style.css';
-```
-
 Style is wrapped in a block with the class .date-picker, you can use it to override it locally as needed.
 You must use the css file provided in the lib to have the correct style
 Font family is not included in the css file, you can use the one you want
