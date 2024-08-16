@@ -134,6 +134,28 @@
     width: 100%;
   }
 
+  .input-error {
+    color: red;
+    margin: 0;
+    font-size: 0.7em;
+  }
+
+  .input-error.fade-in {
+    box-sizing: border-box;
+    animation: fadeIn 0.5s ease-in-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(0%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(50%);
+    }
+  }
+
 }
 
 #calendarOverlay {

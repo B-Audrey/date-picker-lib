@@ -25,7 +25,8 @@ const DatePicker = ({
                         inputName,
                         isRequired,
                         returnFormat,
-                        setDate
+                        setDate,
+                        requiredMessage,
                     }: DatePickerProps) => {
 
     const dateInputRef = useRef<HTMLInputElement>(null);
@@ -37,7 +38,22 @@ const DatePicker = ({
     const [hasShowAnimationClass, setHasShowAnimationClass] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [hiddenDateValue, setHiddenDateValue] = useState<any>(null);
+    const [hasBeenOpened, setHasBeenOpened] = useState<boolean>(false);
+    const [hasError, setHasError] = useState({hasError: false, message: ''});
 
+    useEffect(() => {
+        if(!isRequired) {
+            return;
+        }
+        if (openCloseStatus || !hasBeenOpened) {
+            return;
+        }
+        if (selectedDate) {
+            setHasError({hasError: false, message: ''});
+        } else {
+            setHasError({hasError: true, message: requiredMessage || 'Vous devez choisir une date'});
+        }
+    }, [openCloseStatus]);
 
     useEffect(() => {
         setId(getId());
@@ -101,6 +117,7 @@ const DatePicker = ({
     };
 
     const moveCalendar = (isToOpen: boolean) => {
+       setHasBeenOpened(true);
         if (isToOpen) {
             setOpenCloseStatus(true);
             return setTimeout(() => {
@@ -185,6 +202,7 @@ const DatePicker = ({
                     </svg>
                 </div>
             </div>
+            <span className={`input-error ${hasError ? 'fade-in' : ''}`}>{hasError.message}</span>
             {openCloseStatus && createPortal(
                 <div style={{backgroundColor: '#FFF'}}>
                     <div id="calendarOverlay" onClick={() => moveCalendar(false)}></div>

@@ -8,5 +8,6 @@ export interface DatePickerProps {
     inputName: string,
     isRequired: boolean,
     returnFormat: 'string' | 'zuluString' | 'number' | 'localeUtc',
-    setDate?: Dispatch<SetStateAction<any>>
+    setDate?: Dispatch<SetStateAction<any>>,
+    requiredMessage?: string,
 }
